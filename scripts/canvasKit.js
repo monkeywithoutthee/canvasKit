@@ -71,10 +71,10 @@ const handleMouseDown = ((event)=>{
         ctxo.beginPath();
       };
       if (oPage.isPathStarted){
-        oPage.images[oPage.currentImage].imagedata.push({type:'grade',move:{x:oPage.lastPoint.x,y:oPage.lastPoint.y}});
+        oPage.images[oPage.currentImage].imagedata.push({type:'grade',move:{x:oPage.lastPoint.x,y:oPage.lastPoint.y},firstmove:false});
         ctxo.lineTo(oPage.lastPoint.x,oPage.lastPoint.y);
       };
-      oPage.images[oPage.currentImage].imagedata.push({type:'grade',move:{x:oPage.startX,y:oPage.startY}});
+      oPage.images[oPage.currentImage].imagedata.push({type:'grade',move:{x:oPage.startX,y:oPage.startY},firstmove:!oPage.isPathStarted});
       ctxo.lineTo(oPage.startX,oPage.startY);
       ctxo.stroke();
       oPage.lastPoint.x = oPage.startX;
@@ -232,8 +232,9 @@ document.addEventListener('click',(event)=>{
         oPage.images.push({imagedata:[]});
         oPage.currentImage = oPage.images.length-1;
         setLocal('page',oPage);
-        evTar.classList.add('imSelClass');
+      //  evTar.classList.add('imSelClass');
         drawstuff();
+        drawSavedImageTN();
       };
     //  console.log(oPage.images,'<<in imageOptsEl::',evTar.innerText);
     return;
@@ -246,6 +247,7 @@ document.addEventListener('click',(event)=>{
     oPage.currentImage = index;
     evTar.classList.add('imSelClass');
     drawstuff();
+
   //  console.log(evTar,'<<savedImageTnEl index::',index,holder);
   };
 });
@@ -285,15 +287,46 @@ const changeOptionCol = ((data)=>{
 
 });
 const drawstuff = (()=>{
-  console.log('drawstuff::', oPage.images[oPage.currentImage]);
-  oPage.canvasSize={width:600,height:300};//temp!
-  ctx.clearRect(0,0,oPage.canvasSize.width,oPage.canvasSize.height);
-  ctxo.clearRect(0,0,oPage.canvasSize.width,oPage.canvasSize.height);
-  const o = oPage.options;
-  for (var i=0;i<o.length;i++){
-  
 
-  }
+  oPage.canvasSize={width:600,height:300};//temp!
+  ctx.clearRect(0,0,600,300);
+  ctxo.clearRect(0,0,600,300);
+  var imageData = oPage.images[oPage.currentImage].imagedata;
+  console.log(imageData,'<<drawstuff::', oPage.images[oPage.currentImage].imagedata);
+    var lastpass = '';
+
+    imageData.forEach((item, i) => {
+      if (item.move){
+        console.log(item.type,'<<looping::',item,item.move);
+        if (item.type==='square'){
+          ctx.strokeStyle = oPage.selColors[0];
+          ctxo.strokeStyle = oPage.selColors[0];
+          ctxo.strokeRect(item.move.x,item.move.y,item.move.width,item.move.height);
+        };
+        if (item.type==='circle'){
+          ctx.strokeStyle = oPage.selColors[1];
+          ctxo.strokeStyle = oPage.selColors[1];
+          ctxo.beginPath();
+          ctxo.arc(item.move.x, item.move.y, item.move.radius, item.move.starta, item.move.enda);
+          ctxo.stroke();
+        };
+        if (item.type==='grade'){
+          if (i===0){
+            ctxo.beginPath();
+          }
+          ctx.strokeStyle = oPage.selColors[2];
+          ctxo.strokeStyle = oPage.selColors[2];
+          //needs to know if it first move!!! simple
+          if (item.firstmove){
+            ctxo.beginPath();
+          };
+          //
+            ctxo.lineTo(item.move.x,item.move.y);
+            ctxo.stroke();
+        };
+      };
+    });
+
 /*  for (var i = 0; i < oPage.data.length; i++){
     ctx.beginPath();
     oPage.data[i].forEach((item, i) => {

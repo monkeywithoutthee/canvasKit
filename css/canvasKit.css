@@ -38,3 +38,27 @@ canvas{
   background-color: ivory;
 
 }
+.imageOptsEl{
+  display:inline-block;
+}
+.imageOptsH{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.imagesDiv{
+  margin-left: 8px;
+  height:60px;
+}
+.savedImageTnEl{
+  height: 50px;
+  width: 50px;
+  border-width: 0.5px;
+  border-style: solid;
+  margin: 3px;
+  padding: 3px;
+  display: inline-block;
+}
+.imSelClass{
+  background-color: lightgray;
+}
