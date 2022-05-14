@@ -6,14 +6,16 @@ const ctxo = overlay.getContext("2d");
 const canBackground = document.getElementById('canBack');
 const ctxb = canBackground.getContext('2d');
 
-
+var sl = window.localStorage;
+    //  sl.clear();//be very very careful with this!! it wipes everything. Never ever put it live!!
 
 // calculate where the canvas is on tzhe window
 var x = canvas.getClientRects();
-console.log(x,'<<canvas');
+//console.log(x,'<<canvas');
 var oPage = {
   options:['square','circle','grade'],
   currentOption:'square',
+  canvasSize:{width:600,height:300},
   offsetX:x[0].left,
   offsetY:x[0].top,
   isDown:false,
@@ -78,12 +80,12 @@ const handleMouseDown = ((event)=>{
       oPage.lastPoint.x = oPage.startX;
       oPage.lastPoint.y = oPage.startY;
       oPage.isPathStarted = true;
-     console.log('in grade DOWN::',oPage.images[oPage.currentImage])
+     //console.log('in grade DOWN::',oPage.images[oPage.currentImage])
     };
 
     oPage.isDown = true;
 
-  console.log('mouse down start::',oPage.images[oPage.currentImage]);
+  //console.log('mouse down start::',oPage.images[oPage.currentImage]);
     return;
 });
 
@@ -221,25 +223,57 @@ document.addEventListener('click',(event)=>{
     //console.log(oPage.currentOption,'<<in optionEl SQ');
     return;
   };
+  if (evTar.className.includes('imageOptsEl')){
+      if (evTar.innerText==='save'){
+          setLocal('page',oPage);
+      };
+      if (evTar.innerText==='add_box'){
+        removeClass({class:'imSelClass'});
+        oPage.images.push({imagedata:[]});
+        oPage.currentImage = oPage.images.length-1;
+        setLocal('page',oPage);
+        evTar.classList.add('imSelClass');
+        drawstuff();
+      };
+    //  console.log(oPage.images,'<<in imageOptsEl::',evTar.innerText);
+    return;
+  };
+  if (evTar.className.includes('savedImageTnEl')){
+    //opens an image from the tn menu
+    removeClass({class:'imSelClass'});
+    var holder = document.querySelector('.imagesDiv');
+    const index = Array.from(holder.childNodes).indexOf(evTar);
+    oPage.currentImage = index;
+    evTar.classList.add('imSelClass');
+    drawstuff();
+  //  console.log(evTar,'<<savedImageTnEl index::',index,holder);
+  };
 });
 document.getElementById('colPickr').addEventListener('change',(event)=>{
   changeOptionCol({value:event.target.value});
-  console.log('colPickr::',event.target.value);
+//console.log('colPickr::',event.target.value);
 });
 document.addEventListener('DOMContentLoaded',(event)=>{
   //open the last image OR start a new one
+  var x = getLocal('page');
+  //console.log('innit::',x);
+  if (x){
+    oPage = x;
+  };
   if (oPage.images.length===0){
     oPage.images.push({imagedata:[{type:oPage.currentOption,moves:[]}]})
+    drawSavedImageTN();
   }else{
     //else draw last image
     drawstuff();
+    drawSavedImageTN();
   };
   //optionElHigh
   var opt = document.querySelectorAll('.optionEl');
   var index = oPage.options.indexOf(oPage.currentOption);
   //optionElHigh
-  opt[index].firstChild.classList.add('optionElHigh');
-    console.log(oPage.images,'<<DOMContentLoaded::',opt[index],index);
+//  opt[index].firstChild.classList.add('optionElHigh');
+    //console.log(oPage.images,'<<DOMContentLoaded::',opt[index],index,x);
 });
 const changeOptionCol = ((data)=>{
   //data = {value:''};
@@ -247,13 +281,20 @@ const changeOptionCol = ((data)=>{
   oPage.selColors[index] = data.value;
   ctxo.strokeStyle = oPage.selColors[index];
   ctx.strokeStyle = oPage.selColors[index];
-  console.log(data,'<<',index,oPage.selColors);
+  //console.log(data,'<<',index,oPage.selColors);
 
 });
 const drawstuff = (()=>{
-  console.log('drawstuff::', oPage.images);
-/*  ctx.clearRect(0,0,400,400);
-  for (var i = 0; i < oPage.data.length; i++){
+  console.log('drawstuff::', oPage.images[oPage.currentImage]);
+  oPage.canvasSize={width:600,height:300};//temp!
+  ctx.clearRect(0,0,oPage.canvasSize.width,oPage.canvasSize.height);
+  ctxo.clearRect(0,0,oPage.canvasSize.width,oPage.canvasSize.height);
+  const o = oPage.options;
+  for (var i=0;i<o.length;i++){
+    var x =
+
+  }
+/*  for (var i = 0; i < oPage.data.length; i++){
     ctx.beginPath();
     oPage.data[i].forEach((item, i) => {
       ctx.lineTo(item.x, item.y);
@@ -261,3 +302,30 @@ const drawstuff = (()=>{
     ctx.stroke();
   };*/
 });
+var drawSavedImageTN = (()=>{
+  var sHTML = '';
+  var tns = oPage.images;
+  if (tns){
+    tns.forEach((item, i) => {
+      var imSelClass = '';
+      if (oPage.currentImage === i){
+        imSelClass = ' imSelClass';
+      }
+      sHTML += `<div class='savedImageTnEl${imSelClass}'>${i}</div>`;
+    });
+  };
+
+  document.querySelector('.imagesDiv').innerHTML = sHTML;
+  var x = canvas.getClientRects();
+  oPage.offsetX = x[0].left;
+  oPage.offsetY = x[0].top;
+});
+
+function getLocal(name){
+    return JSON.parse(sl.getItem(name));
+}
+function setLocal(name,data){
+  //  console.log(name,'<<setLocal::',JSON.stringify(data));
+    sl.setItem(name,JSON.stringify(data))
+    return true;
+}
