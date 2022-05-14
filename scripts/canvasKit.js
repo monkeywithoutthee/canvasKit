@@ -291,7 +291,7 @@ const drawstuff = (()=>{
   ctxo.clearRect(0,0,oPage.canvasSize.width,oPage.canvasSize.height);
   const o = oPage.options;
   for (var i=0;i<o.length;i++){
-    var x =
+  
 
   }
 /*  for (var i = 0; i < oPage.data.length; i++){
