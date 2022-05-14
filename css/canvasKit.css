@@ -1,0 +1,40 @@
+body{
+  background-color: lightgreen;
+}
+canvas{
+  border: 0.5px inset black;
+  position: absolute;
+  margin: 10px;
+}
+.materialXtra{
+  font-size: 50px;
+}
+.optionsClass{
+  border-radius: 3px;
+  margin: 10px;
+  margin-bottom: 2px;
+}
+.optionEl{
+  display: inline-block;
+  background-color: rgba(255,255,255,0.3);
+  border-radius: 3px;
+  line-height: 1;
+  padding: 3px;
+}
+.optionElHigh{
+  background-color: grey;
+}
+.colPickr{
+  border-color: black;
+  border-radius: 4px;
+}
+.canOverlay{
+
+}
+.canCanvas{
+
+}
+.canBack{
+  background-color: ivory;
+
+}

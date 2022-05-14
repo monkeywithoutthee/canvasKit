@@ -1,0 +1,31 @@
+<!--
+  simple image creator software using canvas.
+  started from a fiffle on jsfiddle at http://jsfiddle.net/xkmqz9ho/
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>canvas basic drawing kit</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined"
+          rel="stylesheet">
+    <link rel="stylesheet" href="css/canvasKit.css">
+
+  </head>
+  <body>
+    <div class="optionsClass">
+      <div class="optionEl"><span class="material-icons-outlined materialXtra optionEl">square</span></div>
+      <div class="optionEl"><span class="material-icons-outlined materialXtra optionEl">circle</span></div>
+      <div class="optionEl"><span class="material-icons-outlined materialXtra optionEl">grade</span></div>
+      <div class="optionEl"><input type="color" id="colPickr" value="#ffff00" class="colPickr"></div>
+    </div>
+    <div id="canvasWrapper">
+      <canvas id="canBack" class="canBack" width=600 height=300></canvas>
+     <canvas id="overlay" class="canOverlay" width=600 height=300></canvas>
+     <canvas id="canvas" class="canCanvas" width=600 height=300></canvas>
+
+    </div>
+  </body>
+  <script src="scripts/canvasKit.js"></script>
+</html>
