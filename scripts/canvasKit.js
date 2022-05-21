@@ -34,8 +34,6 @@
       currentImage:0
     };
     //image will have layers, layers will have data, data will differ on shape
-    //var index = oPage.options.indexOf(oPage.currentOption);
-    //document.getElementById('colPickr').value = oPage.selColors[oPage.options.indexOf(oPage.currentOption)];
     // style the context
     ctx.strokeStyle = oPage.selColors[oPage.options.indexOf(oPage.currentOption)];
     ctx.lineWidth = 3;
